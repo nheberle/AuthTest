@@ -11,10 +11,11 @@ using AuthTest.Providers;
 namespace AuthTest {
     public class Startup {
         public void Configuration(IAppBuilder app) {
-            var config = new HttpConfiguration();
-            //other configurations
+            HttpConfiguration config = new HttpConfiguration();
 
             ConfigureOAuth(app);
+
+            WebApiConfig.Register(config);
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
             app.UseWebApi(config);
         }
@@ -22,7 +23,7 @@ namespace AuthTest {
         public void ConfigureOAuth(IAppBuilder app) {
             var oAuthServerOptions = new OAuthAuthorizationServerOptions() {
                 AllowInsecureHttp = true,
-                TokenEndpointPath = new PathString("/api/security/token"),
+                TokenEndpointPath = new PathString("/token"),
                 AccessTokenExpireTimeSpan = TimeSpan.FromHours(2),
                 Provider = new AuthorizationServerProvider()
             };

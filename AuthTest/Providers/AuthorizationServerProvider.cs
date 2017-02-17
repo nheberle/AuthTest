@@ -12,7 +12,11 @@ using System.Web;
 namespace AuthTest.Providers {
     public class AuthorizationServerProvider : OAuthAuthorizationServerProvider {
         public override async Task ValidateClientAuthentication(OAuthValidateClientAuthenticationContext context) {
-            context.Validated();
+            try {
+                context.Validated();
+            } catch (Exception ex) {
+                context.SetError(ex.Message, ex.StackTrace);
+            }
         }
 
         public override async Task GrantResourceOwnerCredentials(OAuthGrantResourceOwnerCredentialsContext context) {
@@ -20,11 +24,16 @@ namespace AuthTest.Providers {
 
             try {
                 //Obtem usuário da base de dados
-                UserStoreService uss = new UserStoreService();
-                var user = await uss.Authenticate(context.UserName, context.Password);
+                Models.User user = null;
+                using (UserStoreService uss = new UserStoreService()) {
+                    user = await uss.Authenticate(context.UserName, context.Password);
+                    if (user == null) {
+                        context.SetError("invalid_grant", "The user name or password is incorrect.");
+                        return;
+                    } 
+                }
 
                 var identity = new ClaimsIdentity(context.Options.AuthenticationType);
-
                 identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
                 identity.AddClaim(new Claim(ClaimTypes.Email, user.UserEmail));
 
