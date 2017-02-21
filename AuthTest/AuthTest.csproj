@@ -134,16 +134,22 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
-    <Compile Include="DbService\UserStoreService.cs" />
+    <Compile Include="Controllers\RefreshTokensController.cs" />
+    <Compile Include="DbService\DbRepository.cs" />
+    <Compile Include="DbService\Helper.cs" />
     <Compile Include="Migrations\201702132010383_AddUser.cs" />
     <Compile Include="Migrations\201702132010383_AddUser.Designer.cs">
       <DependentUpon>201702132010383_AddUser.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AuthTestContext.cs" />
+    <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\Enum.cs" />
+    <Compile Include="Models\RefreshToken.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\AuthorizationServerProvider.cs" />
+    <Compile Include="Providers\SimpleRefreshTokenProvider.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
